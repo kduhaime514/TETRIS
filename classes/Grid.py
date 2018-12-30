@@ -1,5 +1,6 @@
 import pygame
 import constant
+from Block import Block
 
 class Grid():
     def __init__(self, gridLength, windowWidth):
@@ -24,22 +25,30 @@ class Grid():
         # TODO
         bar = "baz"
 
-    def draw(self, window):
-        pygame.draw.rect(window, (255, 255, 255), (self.x, self.y, self.width, self.height))
-
-        # TODO - draw grid?
+    def __drawGrid(self, window):
+        # TODO - might be a performance hit to redraw this every frame. Really only need to redraw when something changes
         x = 0
         y = 0
-
         while x < constant.TOTAL_BLOCKS_X:
             while y < constant.TOTAL_BLOCKS_Y:
-                pygame.draw.rect(window, (0, 0, 0), (self.getPosition(x), self.getPosition(y), self.gridLength, self.gridLength))
-
-                # TODO - duplicated code. these could techncially be repeated "white" blocks to form the grid
-                innerSquare = (self.getPosition(x) + constant.BORDER_WIDTH, self.getPosition(y) + constant.BORDER_WIDTH, self.gridLength - 2*constant.BORDER_WIDTH, self.gridLength - 2*constant.BORDER_WIDTH)
-                pygame.draw.rect(window, (255, 255, 255), innerSquare)
+                block = Block(self.gridLength, x, y, (255, 255, 255))
+                block.draw(window, self, 0, 0)
                 y+=1
             y=0
             x+=1
 
+    def __drawBlocks(self, window):
+        for block in self.blocks:
+            foo = "bar"
+
+    def draw(self, window):
+        # Draw white background of play area
+        # TODO - probably not needed
+        pygame.draw.rect(window, (0, 0, 255), (self.x, self.y, self.width, self.height))
+
+        # Draw Grid
+        self.__drawGrid(window)
+        
         # TODO - draw blocks too!
+
+    

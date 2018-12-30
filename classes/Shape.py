@@ -52,14 +52,4 @@ class Shape():
         shapeYPosition = self.grid.getPosition(self.yCoord)
 
         for block in self.blocks:
-
-            # TODO - maybe the blocks should be in charge of drawing themselves?
-            blockXPosition = self.grid.getPosition(block.xCoord)
-            blockYPosition = self.grid.getPosition(block.yCoord)    
-
-            # border
-            pygame.draw.rect(window, (0, 0, 0), (shapeXPosition + blockXPosition, shapeYPosition + blockYPosition, block.width, block.height))
-
-            # inner square
-            innerSquare = (shapeXPosition + blockXPosition + constant.BORDER_WIDTH, shapeYPosition + blockYPosition + constant.BORDER_WIDTH, block.width - 2*constant.BORDER_WIDTH, block.height - 2*constant.BORDER_WIDTH)
-            pygame.draw.rect(window, block.color, innerSquare)
+            block.draw(window, self.grid, shapeXPosition, shapeYPosition)
