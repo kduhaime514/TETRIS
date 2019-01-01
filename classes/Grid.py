@@ -11,15 +11,24 @@ class Grid():
         self.blocks = []
         self.gridLength = gridLength
 
+    def shapeReachedBottom(self, shape):
+        for fallingBlock in shape.blocks:
+            if fallingBlock.yCoord + 1 == constant.TOTAL_BLOCKS_Y:
+                return True
+            for stationaryBlock in self.blocks:
+                if stationaryBlock.xCoord == fallingBlock.xCoord and stationaryBlock.yCoord == fallingBlock.yCoord + 1:
+                    return True
+        
+        return False
+
     # Returns the position (in pixels) of the provided coordinate
     # Assumes the coordinate plane starts at (0,0), in the upper left of the window
     # Returns the pixel position of the upper left corner of the corresponding grid cell
     def getPosition(self, coord):
         return coord*self.gridLength
 
-    def addBlock(self):
-        # TODO
-        foo = "bar"
+    def addBlocks(self, blocks):
+        self.blocks.extend(blocks)
 
     def clearRow(self, y):
         # TODO
@@ -32,23 +41,17 @@ class Grid():
         while x < constant.TOTAL_BLOCKS_X:
             while y < constant.TOTAL_BLOCKS_Y:
                 block = Block(self.gridLength, x, y, (255, 255, 255))
-                block.draw(window, self, 0, 0)
+                block.draw(window, self)
                 y+=1
             y=0
             x+=1
 
     def __drawBlocks(self, window):
         for block in self.blocks:
-            foo = "bar"
+            block.draw(window, self)
 
     def draw(self, window):
-        # Draw white background of play area
-        # TODO - probably not needed
-        pygame.draw.rect(window, (0, 0, 255), (self.x, self.y, self.width, self.height))
-
-        # Draw Grid
         self.__drawGrid(window)
-        
-        # TODO - draw blocks too!
+        self.__drawBlocks(window)
 
     
