@@ -23,9 +23,7 @@ gridLength = round(windowHeight/constant.TOTAL_BLOCKS_Y)
 grid = Grid(gridLength, windowWidth)
 
 def spawnNewShape():
-    # TODO - flip back to renable the correct spawn position
-    return Shape(grid, ShapeType.getRandom(), 3, 5)
-    # return Shape(grid, ShapeType.getRandom(), 3, 0)
+    return Shape(grid, ShapeType.getRandom(), 3, 0)
 dropShape = spawnNewShape()
 
 dropRate = constant.STARTING_DROP_RATE
