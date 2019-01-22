@@ -2,6 +2,7 @@ import pygame
 import constant
 
 import sys
+import Controls
 sys.path.append('./classes')
 from Shape import Shape
 from ShapeType import ShapeType
@@ -22,7 +23,9 @@ gridLength = round(windowHeight/constant.TOTAL_BLOCKS_Y)
 grid = Grid(gridLength, windowWidth)
 
 def spawnNewShape():
-    return Shape(grid, ShapeType.getRandom(), 4, 0)
+    # TODO - flip back to renable the correct spawn position
+    return Shape(grid, ShapeType.getRandom(), 3, 5)
+    # return Shape(grid, ShapeType.getRandom(), 3, 0)
 dropShape = spawnNewShape()
 
 dropRate = constant.STARTING_DROP_RATE
@@ -33,14 +36,7 @@ while run:
     clock+=tickRate
     pygame.time.delay(tickRate)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                dropShape.move(Direction.LEFT)
-            if event.key == pygame.K_RIGHT:
-                dropShape.move(Direction.RIGHT)
+    run = Controls.handleEvents(pygame.event.get(), dropShape)
     
     # Drop logic
     if not clock%dropRate:
@@ -49,6 +45,7 @@ while run:
         else:
             grid.addBlocks(dropShape.blocks)
             dropShape = spawnNewShape()
+            run = not grid.gameOver(dropShape)
 
     grid.draw(window)
     dropShape.draw(window)

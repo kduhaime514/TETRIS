@@ -12,4 +12,6 @@ class ShapeType(enum.Enum):
 
     @staticmethod
     def getRandom():
-        return ShapeType(random.randint(1, 7))
+        # TODO - flip back to renable randomness
+        return ShapeType(1)
+        # return ShapeType(random.randint(1, 7))

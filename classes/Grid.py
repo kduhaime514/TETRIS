@@ -1,6 +1,7 @@
 import pygame
 import constant
 from Block import Block
+from Direction import Direction
 
 class Grid():
     def __init__(self, gridLength, windowWidth):
@@ -11,8 +12,16 @@ class Grid():
         self.blocks = []
         self.gridLength = gridLength
 
-    def shapeReachedBottom(self, shape):
-        for fallingBlock in shape.blocks:
+    def gameOver(self, fallingShape):
+        for fallingBlock in fallingShape.blocks:
+            for stationaryBlock in self.blocks:
+                if stationaryBlock.xCoord == fallingBlock.xCoord and stationaryBlock.yCoord == fallingBlock.yCoord:
+                    return True
+        
+        return False
+
+    def shapeReachedBottom(self, fallingShape):
+        for fallingBlock in fallingShape.blocks:
             if fallingBlock.yCoord + 1 == constant.TOTAL_BLOCKS_Y:
                 return True
             for stationaryBlock in self.blocks:
@@ -20,6 +29,21 @@ class Grid():
                     return True
         
         return False
+
+    def shapeCanMoveSideways(self, shape, direction):
+        increment = 0
+        if direction == Direction.LEFT:
+            increment = -1
+        elif direction == Direction.RIGHT:
+            increment = 1
+
+        for fallingBlock in shape.blocks:
+            if fallingBlock.xCoord + increment < 0 or fallingBlock.xCoord + increment > constant.TOTAL_BLOCKS_X - 1:
+                return False
+            for stationaryBlock in self.blocks:
+                if stationaryBlock.yCoord == fallingBlock.yCoord and stationaryBlock.xCoord == fallingBlock.xCoord + increment:
+                    return False
+        return True
 
     # Returns the position (in pixels) of the provided coordinate
     # Assumes the coordinate plane starts at (0,0), in the upper left of the window
@@ -33,6 +57,21 @@ class Grid():
     def clearRow(self, y):
         # TODO
         bar = "baz"
+
+    def draw(self, window):
+        self.__drawGrid(window)
+        self.__drawBlocks(window)
+
+    def __reachedAVerticalLimit(self, fallingShape, offset):
+        for fallingBlock in fallingShape.blocks:
+            if fallingBlock.yCoord + offset == constant.TOTAL_BLOCKS_Y:
+                print("Shape spawned at limit?")
+                return True
+            for stationaryBlock in self.blocks:
+                if stationaryBlock.xCoord == fallingBlock.xCoord and stationaryBlock.yCoord == fallingBlock.yCoord + offset:
+                    return True
+        
+        return False
 
     def __drawGrid(self, window):
         # TODO - might be a performance hit to redraw this every frame. Really only need to redraw when something changes
@@ -49,9 +88,3 @@ class Grid():
     def __drawBlocks(self, window):
         for block in self.blocks:
             block.draw(window, self)
-
-    def draw(self, window):
-        self.__drawGrid(window)
-        self.__drawBlocks(window)
-
-    
