@@ -2,7 +2,8 @@ import pygame
 import constant
 
 import sys
-import Controls
+import controls
+import shapeGenerator
 sys.path.append('./classes')
 from Shape import Shape
 from ShapeType import ShapeType
@@ -22,12 +23,12 @@ myFont = pygame.font.SysFont("Times New Roman", 12)
 gridLength = round(windowHeight/constant.TOTAL_BLOCKS_Y)
 grid = Grid(gridLength, windowWidth)
 
-def spawnNewShape():
-    if constant.TEST_ROTATE_MODE:
-        return Shape(grid, ShapeType(constant.TEST_ROTATE_MODE_SHAPE), 3, 8)
-    else:
-        return Shape(grid, ShapeType.getRandom())
-dropShape = spawnNewShape()
+# def spawnNewShape():
+#     if constant.TEST_ROTATE_MODE:
+#         return Shape(grid, ShapeType(constant.TEST_ROTATE_MODE_SHAPE), 3, 8)
+#     else:
+#         return Shape(grid, ShapeType.getRandom())
+dropShape = shapeGenerator.spawnNewShape(grid)
 
 dropRate = constant.STARTING_DROP_RATE
 clock = 0
@@ -37,16 +38,16 @@ while run:
     clock+=tickRate
     pygame.time.delay(tickRate)
 
-    run = Controls.handleEvents(pygame.event.get(), dropShape)
+    run = controls.handleEvents(pygame.event.get(), dropShape)
     
     # Drop logic
     if not clock%dropRate:
         if not grid.shapeReachedBottom(dropShape):
-            if not constant.TEST_ROTATE_MODE:
-                dropShape.move(Direction.DOWN)
+            # if not constant.TEST_ROTATE_MODE:
+            dropShape.move(Direction.DOWN)
         else:
             grid.addBlocks(dropShape.blocks)
-            dropShape = spawnNewShape()
+            dropShape = shapeGenerator.spawnNewShape(grid)
             run = not grid.gameOver(dropShape)
 
     grid.draw(window)
