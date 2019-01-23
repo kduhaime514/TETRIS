@@ -26,7 +26,7 @@ def spawnNewShape():
     if constant.TEST_ROTATE_MODE:
         return Shape(grid, ShapeType(constant.TEST_ROTATE_MODE_SHAPE), 3, 8)
     else:
-        return Shape(grid, ShapeType.getRandom(), 3, 0)
+        return Shape(grid, ShapeType.getRandom())
 dropShape = spawnNewShape()
 
 dropRate = constant.STARTING_DROP_RATE
