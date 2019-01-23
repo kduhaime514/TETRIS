@@ -10,7 +10,10 @@ class ShapeType(enum.Enum):
     STEP_MIRROR = 6
     TRIANGLE = 7
 
+    def get(index):
+        return ShapeType(index)
+
     @staticmethod
     def getRandom():
-        # TODO - flip back to renable randomness
-        return ShapeType(random.randint(1, 7))
+        return ShapeType(1)
+        # return ShapeType(random.randint(1, 7))

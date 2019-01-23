@@ -23,7 +23,10 @@ gridLength = round(windowHeight/constant.TOTAL_BLOCKS_Y)
 grid = Grid(gridLength, windowWidth)
 
 def spawnNewShape():
-    return Shape(grid, ShapeType.getRandom(), 3, 0)
+    if constant.TEST_ROTATE_MODE:
+        return Shape(grid, ShapeType(constant.TEST_ROTATE_MODE_SHAPE), 3, 8)
+    else:
+        return Shape(grid, ShapeType.getRandom(), 3, 0)
 dropShape = spawnNewShape()
 
 dropRate = constant.STARTING_DROP_RATE
@@ -39,7 +42,8 @@ while run:
     # Drop logic
     if not clock%dropRate:
         if not grid.shapeReachedBottom(dropShape):
-            dropShape.move(Direction.DOWN)
+            if not constant.TEST_ROTATE_MODE:
+                dropShape.move(Direction.DOWN)
         else:
             grid.addBlocks(dropShape.blocks)
             dropShape = spawnNewShape()
